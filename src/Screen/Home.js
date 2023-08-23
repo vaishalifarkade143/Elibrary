@@ -2,14 +2,37 @@ import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, FlatList, 
 import React, { useState } from 'react'
 import Header from './Common/Header';
 import { ScrollView } from 'react-native-gesture-handler';
-// import React, {useRef, useState} from 'react'
+import { Dropdown } from 'react-native-element-dropdown';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 
-const books = [{ id: 1, name: "BOOK" }, { id: 2, name: "AUTHOR" }]
+//for dropdown
+const data = [{ label: 'Book', value: '1' },
+{ label: 'Author', value: '2' },] //
+
 const Home = ({ navigation }) => {
-  const [clicked, setClicked] = useState(false);
-  const [data, setData] = useState(books);
-  const [Selectedbooks, setSelectedbooks] = useState('BOOK');
+
+  //for dropdown
+  // const [clicked, setClicked] = useState(false);
+  // const [data, setData] = useState(books);
+  // const [Selectedbooks, setSelectedbooks] = useState('BOOK');
+
+  const [value, setValue] = useState(null);
+   const [isFocus, setIsFocus] = useState(false);
+
+  //git dropdown
+  const renderLabel = () => {
+    if (value || isFocus) {
+      return (
+        <Text style={[styles.label, isFocus && { color: 'blue' }]}>
+          Select your Choice
+        </Text>
+      );
+    }
+    return null;
+  };//
+
+
   return (
     <View style={styles.container}>
       <Header
@@ -34,57 +57,12 @@ const Home = ({ navigation }) => {
             <Text style={styles.texth2}>Serving You Millions of eResources | 24x7 | Everywhere</Text>
           </View >
         </View>
-        {/* <TouchableOpacity style={styles.dropdownSelector}
-
-            onPress={() => {
-              setClicked(!clicked);
-            }}>
-            <Text style={{ fontWeight: '600', color: '#000' }}>
-              {Selectedbooks == '' ? 'BOOK' : Selectedbooks}
-            </Text>
-            <Image
-              source={require('../images/upload.png')}
-              style={styles.icon}
-            />
-          </TouchableOpacity>
-          {clicked ? (
-            <View
-              style={styles.viewflatlist}>
-              <TextInput placeholder='Search' style={styles.searchInput}></TextInput>
-               <FlatList
-                data={data}
-                renderItem={({ item, index }) => {
-                  return (
-                    <TouchableOpacity style={styles.bookitem}>
-
-                    </TouchableOpacity>
-                  );
-                }}
-
-              /> 
-              <FlatList
-                data={data}
-                renderItem={({ item }) => {
-                  return (
-                    <TouchableOpacity
-                      style={styles.dropflatlist}
-                      onPress={() => {
-                        setSelectedbooks(item.name);
-                        setClicked(!clicked);
-
-                      }}>
-                      <Text style={{ fontWeight: '600', color: '#000' }}>{item.name}</Text>
-                    </TouchableOpacity>
-                  );
-                }}
-              />
-
-            </View>
-          ) : null} */}
-
+        {/* for search n dropdown */}
 
         <View style={styles.mainDropNSearch}>
-          <View style={styles.dropdown}>
+          {/* for dropdown */}
+
+          {/* <View style={styles.dropdown}>
             <TouchableOpacity style={styles.dropdownSelector}
 
               onPress={() => {
@@ -98,12 +76,11 @@ const Home = ({ navigation }) => {
                 style={styles.icon}
               />
             </TouchableOpacity>
-            
+
             {clicked ? (
               <View
                 style={styles.viewflatlist}>
-
-                <FlatList
+               <FlatList
                   data={data}
                   renderItem={({ item }) => {
                     return (
@@ -123,6 +100,58 @@ const Home = ({ navigation }) => {
               </View>
             ) : null}
           </View>
+
+          // for search
+          <View
+            style={styles.searchView}>
+            <TextInput placeholder='Search' style={styles.searchInput}></TextInput>
+            //for search list
+            <FlatList
+              data={data}
+              renderItem={({ item, index }) => {
+                return (
+                  <TouchableOpacity style={styles.bookitem}>
+
+                  </TouchableOpacity>
+                );
+              }}
+
+            />
+          </View> */}
+
+
+          {/* git code dropdown n search */}
+           {renderLabel()} 
+          <Dropdown
+            style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={data}
+            search
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder={!isFocus ? 'Select item' : '...'}
+            searchPlaceholder="Search..."
+            value={value}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
+            onChange={item => {
+              setValue(item.value);
+              setIsFocus(false);
+            }}
+            renderLeftIcon={() => (
+              <AntDesign
+                style={styles.icon}
+                color={isFocus ? 'blue' : 'black'}
+                name="Safety"
+                size={20}
+              />
+            )}
+          />
+
         </View>
       </View>
     </View>
@@ -138,10 +167,8 @@ const styles = StyleSheet.create({
     height: 300,
     backgroundColor: "#fff3cd",
     flexDirection: 'column',
-    // paddingTop: 5,
     paddingLeft: 5,
     paddingRight: 10,
-    //padding: 10,
     justifyContent: 'center'
   },
   mainImgNText: {
@@ -160,7 +187,6 @@ const styles = StyleSheet.create({
 
   },
   texth1: {
-    // marginTop: 5,
     flexBasis: 'auto',
     fontSize: 29,
     color: '#000',
@@ -174,70 +200,131 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'Poppin-Thin',
   },
+
   mainDropNSearch: {
-    flex:1,
-    flexDirection: 'row',
-   // position: 'relative',
-    alignItems:'flex-start',
-    justifyContent:'flex-start'
-    
+    // flex: 1,
+    // flexDirection: 'row',
+    // width: '100%',
+    //height: Dimensions.get('window'),
+    //alignItems: 'flex-start',
+    //justifyContent: 'flex-start',
+   // backgroundColor: '#fff',
+   // marginTop: 5,
+    padding:16,
   },
-  dropdownSelector: {
-    width: '30%',
-    height: 35,
-    borderRadius: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingLeft: 15,
-    paddingRight: 15,
-    backgroundColor: '#fff',
 
-  },
-  icon: {
-    marginLeft: 8,
-    width: 15,
-    height: 15,
-  },
-  dropdown: {
-    flex: 1,
-    flexDirection:'column',
-    alignItems:'flex-start'
+  // dropdownSelector: {
+  //   width: '65%',
+  //   height: 35,
+  //   borderRadius: 10,
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-between',
+  //   alignItems: 'center',
+  //   paddingLeft: 15,
+  //   paddingRight: 25,
+  //   backgroundColor: '#fff',
 
-  },
-  viewflatlist: {
-    elevation: 5,
-    marginTop: 5,
-    height: 85,
-    width: '30%',
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    marginLeft:5,
-    padding:5
-  },
-  dropflatlist: {
-    width: '100%',
-    alignSelf: 'center',
-    height: 40,
-    justifyContent: 'center',
+  // },
+  // icon: {
+  //   marginLeft: 8,
+  //   width: 15,
+  //   height: 15,
+  // },
+  // dropdown: {
+  //   flex: 1,
+  //   flexDirection: 'column',
+  //   alignItems: 'flex-start'
 
-  },
+  // },
+  // viewflatlist: {
+  //   elevation: 5,
+  //   marginTop: 5,
+  //   height: 85,
+  //   width: '65%',
+  //   backgroundColor: '#fff',
+  //   borderRadius: 10,
+  //   marginLeft: 5,
+  //   padding: 5
+  // },
+  // dropflatlist: {
+  //   width: '100%',
+  //   alignSelf: 'center',
+  //   height: 40,
+  //   justifyContent: 'center',
+
+  // },
+  // searchView: {
+  //   flex: 1.5,
+  //   backgroundColor: '#fff',
+  //   justifyContent: 'flex-end',
+  //   width: '150%',
+  //   alignItems: 'flex-start'
+
+  // },
   // searchInput: {
-  //   width: '90%',
+  //   width: '100%',
   //   height: 35,
   //   borderRadius: 10,
   //   borderWidth: 0.7,
   //   margin: 5,
-  //   paddingLeft: 15,
+  //   paddingLeft: 10,
+  //   paddingRight: 10,
+  //   left: 0,
+  //   top: 0,
+  //   right: 0,
+  //   position: 'absolute'
   // },
   // bookitem: {
-  //   width: '85%',
+  //   width: '100%',
   //   height: 50,
   //   borderBottomWidth: 0.2,
   //   borderBottomColor: '#8e8e8e',
-  //   alignSelf: 'center',
-
+  //   // alignSelf: 'center',
+  //   position: 'absolute'
   // },
-  
+
+  //git code
+  dropdown: {
+    height: 50,
+    borderColor: 'gray',
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    backgroundColor:'#fff'
+  },
+  icon: {
+    marginRight: 5,
+  },
+  label: {
+    position: 'absolute',
+    backgroundColor: 'white',
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
+    //color:'#000'
+    backgroundColor: "#fff3cd",
+   
+    
+  },
+  placeholderStyle: {
+    fontSize: 16,
+    
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+    color:'#000'
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+    color:'#000'
+  },
+
 
 });
