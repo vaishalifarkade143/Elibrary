@@ -1,10 +1,11 @@
 import { View, Text } from 'react-native'
 import React from 'react'
+import BottomTabs from '../Common/BottomTabs';
 
 const Contact = () => {
   return (
-    <View>
-      <Text>Contact</Text>
+    <View style={{flex:1}}>
+        <BottomTabs/> 
     </View>
   );
 };

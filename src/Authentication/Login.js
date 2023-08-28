@@ -1,10 +1,10 @@
 import { View, Image, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
-import Header from './Common/Header';
+import Header from '../Common/Header';
 import { useNavigation } from '@react-navigation/native';
 
-const Login = () => {
-    const navigation = useNavigation();
+const Login = ({navigation}) => {
+    //const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
@@ -20,9 +20,9 @@ const Login = () => {
         <View style={styles.container}>
             <Header
                 rightIcon={require('../images/Logoelibrary.png')}
-                leftIcon={require('../images/menu.png')}
+                leftIcon={require('../images/back.png')}
                 onClickLeftIcon={() => {
-                    navigation.openDrawer();
+                    navigation.navigate('Home');
                 }}
             />
             <View style={styles.floatView}>
@@ -160,7 +160,11 @@ const Login = () => {
                             }}>
                                 New Membership</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity
+                        onPress={() => 
+                            navigation.navigate('ForgetPassword')
+                        }
+                        >
                             <Text style={{
                                 color: '#c27b7f',
                                 margin: 15,
